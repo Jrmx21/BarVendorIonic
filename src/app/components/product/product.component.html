@@ -1,0 +1,33 @@
+<!-- product-modal.page.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Detalles del producto
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Nombre: {{ product.nombre_producto }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Precio: {{ product.precio }}</ion-label>
+    </ion-item>
+    <ion-item>
+    
+      <ion-label *ngIf="product.existencias.data==0" color="warning">Existencias: NO</ion-label>
+      <ion-label *ngIf="product.existencias.data==1" >Existencias: SI</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Categoría: {{ product.categoria }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Alergenos: {{ product.alergenos }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

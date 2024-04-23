@@ -1,5 +1,20 @@
+<!-- product-list.component.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Lista de productos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content [fullscreen]="true">
-  <app-header></app-header>
-  <ion-button href="/login">Login</ion-button>
+<ion-content>
+  <ion-list>
+    <ion-card *ngFor="let product of products">
+      <ion-button color="success" (click)="presentProductModal(product)">Ver más</ion-button>
+      <ion-card-title>{{ product.nombre_producto }}</ion-card-title>
+      <ion-card-subtitle >{{ product.precio }}</ion-card-subtitle>
+      <ion-card-subtitle >{{ product.existencias.data }}</ion-card-subtitle>
+     
+    </ion-card>
+  </ion-list>
 </ion-content>

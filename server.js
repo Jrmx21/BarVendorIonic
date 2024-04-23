@@ -39,6 +39,17 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.get('/productos', (req, res) => {
+    const query = `SELECT * FROM productos`;
+    db.query(query, (err, result) => {
+      if (err) {
+        res.status(500).json({ error: 'Error en el servidor' });
+        throw err;
+      }
+      res.json(result);
+    });
+  });
+  
 app.listen(port, () => {
   console.log(`Servidor backend corriendo en http://localhost:${port}`);
 });
