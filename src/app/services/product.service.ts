@@ -10,6 +10,6 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getAllProducts(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:3000/productos');
+    return this.http.get<any[]>('http://localhost:6969/api/productos');
   }
 }

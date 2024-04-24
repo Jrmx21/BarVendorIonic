@@ -12,17 +12,16 @@
 
 <ion-content>
   <ion-list>
+    <ion-item *ngIf="product.existencias==0">
+      <ion-label  color="danger">No DISPONIBLE</ion-label>
+    </ion-item>
     <ion-item>
-      <ion-label>Nombre: {{ product.nombre_producto }}</ion-label>
+      <ion-label>Nombre: {{ product.nombreProducto }}</ion-label>
     </ion-item>
     <ion-item>
       <ion-label>Precio: {{ product.precio }}</ion-label>
     </ion-item>
-    <ion-item>
-    
-      <ion-label *ngIf="product.existencias.data==0" color="warning">Existencias: NO</ion-label>
-      <ion-label *ngIf="product.existencias.data==1" >Existencias: SI</ion-label>
-    </ion-item>
+
     <ion-item>
       <ion-label>Categoría: {{ product.categoria }}</ion-label>
     </ion-item>
