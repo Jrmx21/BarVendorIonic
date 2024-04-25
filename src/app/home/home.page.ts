@@ -49,22 +49,54 @@ export class HomePage {
     console.log(this.cartService.getCartItems());
     this.cartItems = this.cartService.getCartItems();
   }
-
-  placeOrder() {
-    // Envía una solicitud HTTP para realizar el pedido con los elementos del carrito
-    const orderData = { products: this.cartItems };
-    this.orderService.placeOrder(orderData)
-      .subscribe(
-        response => {
-          console.log('Pedido realizado con éxito:', response);
-          // Limpia el carrito después de realizar el pedido
-          this.cartService.clearCart();
-        },
-        error => {
-          console.error('Error al realizar el pedido:', error);
-        }
-      );
+  calcularPrecioTotal(): number {
+    let total = 0;
+    for (const item of this.cartItems) {
+      total += item.precio;
+    }
+    return total;
   }
+  placeOrder() {
+    // Construye el objeto de pedido con los campos necesarios
+    const pedido = {
+      id: 1, // Puedes generar un ID único aquí o en el backend
+      fecha: new Date().toISOString(), // Fecha actual en formato ISOString
+      notas: 'Notas del pedido', // Notas del pedido (puedes ajustar esto según tus necesidades)
+      user: {
+        id: 1,
+        username: 'Jrmx21',
+        firstName: 'david',
+        lastName: 'ruiz',
+        password: 'eminem',
+        email: 'jrmx1000@gmail.com',
+        role: 'Admin',
+        edad: 20
+      },
+      products: this.cartItems.map(item => ({
+        id: item.id,
+        nombreProducto: item.nombreProducto,
+        categoria: item.categoria,
+        alergenos: item.alergenos,
+        precio: item.precio,
+        existencias: item.existencias
+      })),
+    };
+    
+    // Envía una solicitud HTTP para realizar el pedido con los datos del pedido
+    this.orderService.placeOrder(pedido).subscribe(
+      response => {
+        console.log('Pedido realizado con éxito:', response);
+        // Limpia el carrito después de realizar el pedido
+        this.cartService.clearCart();
+        // Actualiza la lista de elementos del carrito
+        this.actualizarCarro();
+      },
+      error => {
+        console.error('Error al realizar el pedido:', error);
+      }
+    );
+  }
+  
   removeItem(index: number) {
     this.cartService.removeFromCart(index);
   }

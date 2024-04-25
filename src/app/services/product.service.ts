@@ -10,6 +10,6 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getAllProducts(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:6969/api/productos');
+    return this.http.get<any[]>('https://barvendor-8d5be5ce5941.herokuapp.com/api/productos');
   }
 }
