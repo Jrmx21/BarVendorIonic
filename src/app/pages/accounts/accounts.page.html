@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Gestionar Cuentas
+    </ion-title>
+    <ion-button slot="end" href="/"><ion-icon name="home-outline"></ion-icon></ion-button>
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content>
+
+  <!-- Formulario para crear una nueva cuenta -->
+  <ion-item>
+    <ion-label position="floating">Precio Total</ion-label>
+    <ion-input type="number" [(ngModel)]="newAccount.precioTotal"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Seleccione una mesa:</ion-label>
+    <ion-select [(ngModel)]="mesaSelected">
+      <ion-select-option *ngFor="let table of arrayMesas" [value]="table">
+        {{ table.ubicacion }} {{table.id}} {{table.capacidad}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Agrega más campos según sea necesario -->
+
+  <ion-button expand="block" (click)="createAccount()">Crear Cuenta</ion-button>
+
+  <hr>
+
+  <!-- Lista de cuentas existentes -->
+  <ion-list>
+    <ion-item *ngFor="let account of accounts">
+      <ion-label>ID {{ account.id }}</ion-label>
+      <ion-label>Precio Total: {{ account.precioTotal }}</ion-label>
+      <ion-label>Pagado: {{ account.pagado ? 'Sí' : 'No' }}</ion-label>
+      <ion-label>Id de Mesa {{ account.id_mesa }}</ion-label>
+      <ion-button (click)="markAsPaid(account.id)">Marcar como Pagado</ion-button>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

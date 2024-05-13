@@ -4,18 +4,24 @@
     <ion-title>
       Lista de productos
     </ion-title>
+    <ion-button  slot="end"(click)="openCart(true)"><ion-icon name="cart-outline"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-button (click)="openCart(true)">carrito</ion-button>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-button href="/accounts">Pedidos</ion-button>
+  
   <ion-list>
     <ion-card *ngFor="let product of products">
       <ion-button color="success" (click)="presentProductModal(product)">Ver más</ion-button>
       <ion-card-title>{{ product.nombreProducto }}</ion-card-title>
-      <ion-card-subtitle >{{ product.precio }}</ion-card-subtitle>
-      <ion-card-subtitle >{{ product.existencias }}</ion-card-subtitle>
-      <ion-button (click)="addProduct(product)">Agregar al carrito</ion-button>
+      <ion-card-subtitle >{{ product.precio }}€</ion-card-subtitle>
+      
+      <ion-card-subtitle *ngIf="!product.existencias" color="warning" >NO HAY EXISTENCIAS</ion-card-subtitle>
+      <ion-button *ngIf="product.existencias" (click)="addProduct(product)">Agregar al carrito</ion-button>
     </ion-card>
   </ion-list>
 </ion-content>
@@ -48,10 +54,20 @@
     <ion-item *ngFor="let item of cartItems; let i = index">
       
       <ion-label>{{ item.nombreProducto }}</ion-label>
-      <ion-label slot="end">{{ item.precio }}</ion-label>
+      <ion-label slot="end">{{ item.precio }}€</ion-label>
       <ion-button (click)="removeItem(i) ;actualizarCarro()">Eliminar</ion-button>
     </ion-item>
   </ion-list>
+  <ion-item>
+    <ion-label>Cuentas Abiertas</ion-label>
+    <ion-select [(ngModel)]="cuentaSelected">
+      <ion-select-option *ngFor="let cuenta of cuentasAbiertas" [value]="cuenta">{{ cuenta.id }} {{cuenta.mesa.ubicacion}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-label>Select User:</ion-label>
+  <ion-select [(ngModel)]="userSelected">
+    <ion-select-option *ngFor="let user of users" [value]="user">{{ user.id }} {{ user.username }}</ion-select-option>
+  </ion-select>
   <ion-button expand="block" (click)="placeOrder()">Realizar pedido</ion-button>
 </ion-content>
 </ng-template>
