@@ -6,7 +6,7 @@ import { CartService } from '../services/cart.service';
 import { OrderService } from '../services/order.service';
 import { AccountService } from '../services/account.service';
 import { UserService } from '../services/user.service';
-
+import { IonSegmentCustomEvent } from '@ionic/core';
 
 @Component({
   selector: 'app-home',
@@ -14,58 +14,77 @@ import { UserService } from '../services/user.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  cartItems: any[]=[];
-  products: any[]= [];
-  mesaSelected: number=1;
+
+  cartItems: any[] = [];
+  products: any[] = [];
+  mesaSelected: number = 1;
   cuentaSelected: any;
   cuentasAbiertas: any;
   users: any;
-userSelected: any;
+  categoria = '';
+  userSelected: any;
 
-  constructor(private orderService:OrderService,private userService: UserService,private cartService:CartService,private productService: ProductService,private modalController:ModalController, private accountService:AccountService) { }
-  cartOpen:boolean=false;
+  constructor(
+    private orderService: OrderService,
+    private userService: UserService,
+    private cartService: CartService,
+    private productService: ProductService,
+    private modalController: ModalController,
+    private accountService: AccountService
+  ) {}
+  cartOpen: boolean = false;
   openCart(isOpen: boolean) {
     this.cartOpen = isOpen;
   }
+  segmentChanged(event:any) {
+    this.productService.getProductsByCategory(this.categoria).subscribe(
+      (data) => {
+        this.products = data;
+        console.log(data);
+      },
+      (error) => {
+        console.error('Error al obtener productos', error);
+      }
+    );
+  }
   ngOnInit() {
-    this.userService.getAllUsers().subscribe(users => {
+    this.userService.getAllUsers().subscribe((users) => {
       this.users = users;
     });
-  
-     // Obtener cuentas abiertas del usuario
-     this.accountService.getOpenAccounts().subscribe(
-      cuentas => {
+
+    // Obtener cuentas abiertas del usuario
+    this.accountService.getOpenAccounts().subscribe(
+      (cuentas) => {
         this.cuentasAbiertas = cuentas;
         console.log(cuentas);
       },
-      error => {
+      (error) => {
         console.error('Error al obtener cuentas abiertas:', error);
       }
     );
-    this.productService.getAllProducts()
-      .subscribe(
-        data => {
-          this.products = data;
-          console.log(data);
-        },
-        error => {
-          console.error('Error al obtener productos', error);
-        }
-      );
-      this.cartItems = this.cartService.getCartItems();
-      console.log(this.cartItems);
+    this.productService.getProductsByCategory(this.categoria).subscribe(
+      (data) => {
+        this.products = data;
+        console.log(data);
+      },
+      (error) => {
+        console.error('Error al obtener productos', error);
+      }
+    );
+    this.cartItems = this.cartService.getCartItems();
+    console.log(this.cartItems);
   }
-  
+
   async presentProductModal(product: any) {
     const modal = await this.modalController.create({
       component: ProductComponent,
       componentProps: {
-        'product': product
-      }
+        product: product,
+      },
     });
     return await modal.present();
   }
-  addProduct(producto:any) {
+  addProduct(producto: any) {
     console.log('Añadir producto');
     this.cartService.addToCart(producto);
     console.log(producto);
@@ -79,40 +98,37 @@ userSelected: any;
     }
     return total;
   }
-  handleRefresh(event:any) {
+  handleRefresh(event: any) {
     setTimeout(() => {
-      this.userService.getAllUsers().subscribe(users => {
+      this.userService.getAllUsers().subscribe((users) => {
         this.users = users;
       });
-    
-       // Obtener cuentas abiertas del usuario
-       this.accountService.getOpenAccounts().subscribe(
-        cuentas => {
+
+      // Obtener cuentas abiertas del usuario
+      this.accountService.getOpenAccounts().subscribe(
+        (cuentas) => {
           this.cuentasAbiertas = cuentas;
           console.log(cuentas);
         },
-        error => {
+        (error) => {
           console.error('Error al obtener cuentas abiertas:', error);
         }
       );
-      this.productService.getAllProducts()
-        .subscribe(
-          data => {
-            this.products = data;
-            console.log(data);
-          },
-          error => {
-            console.error('Error al obtener productos', error);
-          }
-        );
-        this.cartItems = this.cartService.getCartItems();
-        console.log(this.cartItems);
+      this.productService.getProductsByCategory(this.categoria).subscribe(
+        (data) => {
+          this.products = data;
+          console.log(data);
+        },
+        (error) => {
+          console.error('Error al obtener productos', error);
+        }
+      );
+      this.cartItems = this.cartService.getCartItems();
+      console.log(this.cartItems);
       event.target.complete();
-      
     }, 800);
   }
   placeOrder() {
-    
     // Construye el objeto de pedido con los campos necesarios
     let pedido = {
       fecha: new Date().toISOString(),
@@ -120,23 +136,19 @@ userSelected: any;
       precio: this.calcularPrecioTotal().toString(),
       user: this.userSelected,
       cuenta: this.cuentaSelected,
-      products: this.cartItems.map(item => ({
+      products: this.cartItems.map((item) => ({
         id: item.id,
         nombreProducto: item.nombreProducto,
         categoria: item.categoria,
         alergenos: item.alergenos,
         precio: item.precio,
-        existencias: item.existencias
-      }))
+        existencias: item.existencias,
+      })),
     };
-  
-   
-    
-  
-    
+
     // Envía una solicitud HTTP para realizar el pedido con los datos del pedido
     this.orderService.placeOrder(pedido).subscribe(
-      response => {
+      (response) => {
         console.log(pedido);
         console.log('Pedido realizado con éxito:', response);
         // Limpia el carrito después de realizar el pedido
@@ -144,22 +156,20 @@ userSelected: any;
         // Actualiza la lista de elementos del carrito
         this.actualizarCarro();
       },
-      error => {
-  
+      (error) => {
         console.error('Error al realizar el pedido:', error);
         console.log(pedido);
       }
     );
   }
-  
+
   removeItem(index: number) {
     this.cartService.removeFromCart(index);
   }
   clearCart() {
     this.cartService.clearCart();
   }
-  actualizarCarro(){
-    this.cartItems=this.cartService.getCartItems();
+  actualizarCarro() {
+    this.cartItems = this.cartService.getCartItems();
   }
- 
 }

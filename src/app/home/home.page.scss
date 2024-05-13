@@ -25,3 +25,18 @@
 #container a {
   text-decoration: none;
 }
+.desayunos { background-color: #FF6347; } /* Tomate */
+.entrantes { background-color: #32CD32; } /* Lima */
+.pescados { background-color: #4682B4; } /* Acero azul */
+.vinos { background-color: #6A5ACD; } /* Pizarra azul */
+.carnes { background-color: #FFD700; } /* Oro */
+ion-segment {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+ion-label {
+  padding: 0 10px; /* Aumenta el padding si es necesario */
+}
+ion-segment-button {
+  min-width: 120px; /* Ajusta según sea necesario */
+}
