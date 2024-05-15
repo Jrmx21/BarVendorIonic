@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-title>
+      Tus últimos pedidos
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button href="/"> <ion-icon name="return-down-back-outline" ></ion-icon>
+      </ion-button></ion-buttons>
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let pedido of ultimosPedidos">
+      <ion-label>
+        <h2>Pedido {{ pedido.id }}</h2>
+        <p><strong>Usuario:</strong> {{ pedido.user.id }}</p>
+        <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+        <p><strong>Notas:</strong> {{ pedido.notas }}</p>
+        <p><strong>Precio Total:</strong> {{ pedido.precio }}</p>
+        <!-- Si es necesario, puedes mostrar más campos aquí -->
+        <ion-list>
+          <ion-item *ngFor="let producto of pedido.products">
+            <ion-label>
+              <h3>{{ producto.nombreProducto }}</h3>
+              <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+              <p><strong>Precio:</strong> {{ producto.precio }}</p>
+              <!-- Agrega más campos si es necesario -->
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

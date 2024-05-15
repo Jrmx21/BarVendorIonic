@@ -10,9 +10,17 @@ export class CartService {
   constructor() { }
 
   addToCart(product: any) {
-    this.cartItems.push(product);
-  }
+    const existingItem = this.cartItems.find(item => item.id === product.id);
 
+    if (existingItem) {
+      // Si el producto ya está en el carrito, actualizar la cantidad
+      existingItem.quantity += product.quantity;
+    } else {
+      // Si el producto no está en el carrito, agregarlo al carrito
+      this.cartItems.push(product);
+    }
+  }
+  
   removeFromCart(index: number) {
     this.cartItems.splice(index, 1);
   }

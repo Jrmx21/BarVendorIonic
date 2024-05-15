@@ -12,4 +12,7 @@ export class OrderService {
   placeOrder(orderData: any) {
     return this.http.post<any>('http://localhost:6969/api/pedidos', orderData);
   }
+  getOrders() {
+    return this.http.get<any>('http://localhost:6969/api/pedidos');
+  }
 }

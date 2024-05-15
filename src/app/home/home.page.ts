@@ -85,12 +85,12 @@ export class HomePage {
     return await modal.present();
   }
   addProduct(producto: any) {
-    console.log('Añadir producto');
-    this.cartService.addToCart(producto);
-    console.log(producto);
-    console.log(this.cartService.getCartItems());
-    this.cartItems = this.cartService.getCartItems();
+      this.cartItems.push(producto);
+    
+    console.log(this.cartItems);
   }
+  
+  
   calcularPrecioTotal(): number {
     let total = 0;
     for (const item of this.cartItems) {
@@ -129,7 +129,6 @@ export class HomePage {
     }, 800);
   }
   placeOrder() {
-    // Construye el objeto de pedido con los campos necesarios
     let pedido = {
       fecha: new Date().toISOString(),
       notas: 'Notas del pedido',
@@ -144,8 +143,7 @@ export class HomePage {
         precio: item.precio,
         existencias: item.existencias,
       })),
-    };
-
+    }
     // Envía una solicitud HTTP para realizar el pedido con los datos del pedido
     this.orderService.placeOrder(pedido).subscribe(
       (response) => {
@@ -164,7 +162,15 @@ export class HomePage {
   }
 
   removeItem(index: number) {
-    this.cartService.removeFromCart(index);
+    // Verificar si el índice proporcionado está dentro de los límites del array
+  if (index >= 0 && index < this.cartItems.length) {
+    if (this.cartItems[index].quantity > 1) {
+      this.cartItems[index].quantity--;
+    } else {
+      this.cartItems.splice(index, 1);
+    }
+    this.actualizarCarro();
+  }
   }
   clearCart() {
     this.cartService.clearCart();
