@@ -95,8 +95,23 @@ export class HomePage {
     let total = 0;
     for (const item of this.cartItems) {
       total += item.precio;
+      
     }
-    return total;
+    total= Math.round(total * 100) / 100;
+    return Math.round(total * 100) / 100; // Redondea a dos decimales
+  }
+  sumarPrecioTotalCuenta(precioTotalPedido: number) {
+    if (this.cuentaSelected && this.cuentaSelected.precioTotal) {
+      this.cuentaSelected.precioTotal += precioTotalPedido;
+      this.accountService.updateAccount(this.cuentaSelected.id, this.cuentaSelected).subscribe(
+        (response) => {
+          console.log('Precio total de la cuenta actualizado con éxito:', response);
+        },
+        (error) => {
+          console.error('Error al actualizar el precio total de la cuenta:', error);
+        }
+      );
+    }
   }
   handleRefresh(event: any) {
     setTimeout(() => {
@@ -129,6 +144,7 @@ export class HomePage {
     }, 800);
   }
   placeOrder() {
+    let precioTotalPedido = this.calcularPrecioTotal();
     let pedido = {
       fecha: new Date().toISOString(),
       notas: 'Notas del pedido',
@@ -144,12 +160,14 @@ export class HomePage {
         existencias: item.existencias,
       })),
     }
+    
     // Envía una solicitud HTTP para realizar el pedido con los datos del pedido
     this.orderService.placeOrder(pedido).subscribe(
       (response) => {
         console.log(pedido);
         console.log('Pedido realizado con éxito:', response);
         // Limpia el carrito después de realizar el pedido
+        
         this.cartService.clearCart();
         // Actualiza la lista de elementos del carrito
         this.actualizarCarro();
