@@ -13,14 +13,20 @@ export class AccountService {
 
   // Método para obtener cuentas abiertas
   getOpenAccounts(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}`);
+    return this.http.get<any[]>(`${this.apiUrl}/abiertas`);
   }
 
 
+  getClosedAccounts(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/cerradas`);
+  }
+  
   getAllAccounts(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}`);
   }
-
+  getOrdersForAccount(accountId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${accountId}/pedidos`);
+  }
   createAccount(account: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}`, account);
   }
@@ -29,6 +35,6 @@ export class AccountService {
     return this.http.put<any>(`${this.apiUrl}/${id}`, account);
   }
   markAccountAsPaid(id: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}/pagar`, null);
+    return this.http.put<any>(`${this.apiUrl}/${id}/pagar`, Date.now());
   }
 }

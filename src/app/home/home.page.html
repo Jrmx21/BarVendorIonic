@@ -6,10 +6,10 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-<ion-item href="/last-orders">
-  <!-- <ion-label>Usuario: {{user.username}}</ion-label> -->
-  Tus ultimos pedidos
-</ion-item>
+    <ion-item href="/last-orders">
+      <ion-icon slot="start" name="receipt-outline"></ion-icon>
+      Tus últimos pedidos
+    </ion-item>
   </ion-content>
 </ion-menu>
 <div class="ion-page" id="main-content">
@@ -103,40 +103,36 @@
   </ion-content>
 
   <ion-modal [isOpen]="cartOpen">
-    <!-- cart.page.html -->
     <ng-template>
       <ion-header>
         <ion-toolbar color="secondary">
-          <ion-title> Carrito </ion-title>
+          <ion-title>Carrito</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="openCart(false); actualizarCarro();">
-              <ion-icon name="return-down-back-outline"></ion-icon> </ion-button
-          ></ion-buttons>
+              <ion-icon slot="icon-only" name="return-down-back-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
       <ion-content>
-        <ion-list *ngIf="cartItems.length == 0">
+        <ion-list *ngIf="cartItems.length === 0">
           <ion-item>
             <ion-label>Pedido vacío</ion-label>
           </ion-item>
         </ion-list>
         <ion-list *ngIf="cartItems.length > 0">
           <ion-item>
-            <ion-button color="danger" (click)="clearCart();actualizarCarro()"
-              ><ion-icon name="close-circle-outline"></ion-icon
-            ></ion-button>
+            <ion-button color="danger" expand="full" (click)="clearCart();actualizarCarro()">
+              <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+              Vaciar Carrito
+            </ion-button>
           </ion-item>
           <ion-item *ngFor="let item of cartItems; let i = index">
-            <ion-label
-              >{{ item.nombreProducto }}{{ item.quantity > 1 ? ' x' +
-              item.quantity : '' }}</ion-label
-            >
-            <ion-label slot="end"
-              >{{ (item.precio * item.quantity).toFixed(2) }}€</ion-label
-            >
-            <ion-button (click)="removeItem(i)">-</ion-button>
-            <ion-button (click)="addProduct(item)">+</ion-button>
+            <ion-label>{{ item.nombreProducto }}{{ item.quantity > 1 ? ' x' + item.quantity : '' }}</ion-label>
+            <ion-label slot="end">{{ (item.precio).toFixed(2) }}€</ion-label>
+            <ion-button fill="outline" color="medium" (click)="removeItem(i)">-</ion-button>
+            <ion-button fill="outline" color="medium" (click)="addProduct(item)">+</ion-button>
           </ion-item>
         </ion-list>
         <ion-item>
@@ -148,14 +144,14 @@
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-label>Select User:</ion-label>
+          <ion-label>Seleccione Usuario:</ion-label>
           <ion-select [(ngModel)]="userSelected" required>
             <ion-select-option *ngFor="let user of users" [value]="user">
               {{ user.id }} {{ user.username }}
             </ion-select-option>
           </ion-select>
         </ion-item>
-        <ion-button expand="block" (click)="placeOrder()" [disabled]="!cuentaSelected || !userSelected">
+        <ion-button expand="block" color="success" (click)="placeOrder()" [disabled]="!cuentaSelected || !userSelected">
           Realizar pedido
         </ion-button>
       </ion-content>

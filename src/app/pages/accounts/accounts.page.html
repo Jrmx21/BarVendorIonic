@@ -1,46 +1,75 @@
 <ion-header>
   <ion-toolbar color="secondary">
-    <ion-title>
-      Gestionar Cuentas
-    </ion-title>
+    <ion-title>Gestionar Cuentas</ion-title>
     <ion-buttons slot="end">
-      <ion-button href="/"> <ion-icon name="return-down-back-outline" ></ion-icon>
-      </ion-button></ion-buttons>
+      <ion-button href="/"> <ion-icon name="return-down-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-  
 </ion-header>
 
 <ion-content>
-
   <!-- Formulario para crear una nueva cuenta -->
-  <ion-item>
-    <ion-label position="floating">Precio Total</ion-label>
-    <ion-input type="number" [(ngModel)]="newAccount.precioTotal"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Seleccione una mesa:</ion-label>
-    <ion-select [(ngModel)]="mesaSelected">
-      <ion-select-option *ngFor="let table of arrayMesas" [value]="table">
-        {{ table.ubicacion }} {{table.id}} {{table.capacidad}}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Crear Nueva Cuenta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Precio Total (€)</ion-label>
+        <ion-input type="number" [(ngModel)]="newAccount.precioTotal"></ion-input>
+      </ion-item>
 
-  <!-- Agrega más campos según sea necesario -->
+      <!-- Selector de ubicación -->
+      <ion-segment [(ngModel)]="selectedLocation" (ionChange)="filterTables()">
+        <ion-segment-button value="INTERIOR">
+          <ion-label>Interior</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="EXTERIOR">
+          <ion-label>Exterior</ion-label></ion-segment-button>
+      </ion-segment>
 
-  <ion-button expand="block" (click)="createAccount()">Crear Cuenta</ion-button>
+      <!-- Selector gráfico de mesas -->
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" *ngFor="let table of filteredTables">
+            <ion-card (click)="selectTable(table)" [color]="mesaSelected?.id === table.id ? 'tertiary' : 'light'">
+              <ion-card-content class="table-card-content">
+                <ion-icon name="restaurant-outline" size="large"></ion-icon>
+                <div class="table-info">
+                  <p>ID: {{ table.id }}</p>
+                  <p>Comensales: {{ table.espacio_comensales }}</p>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-  <hr>
+      <ion-button expand="block" color="primary" (click)="createAccount()">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Crear Cuenta
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
-  <!-- Lista de cuentas existentes -->
   <ion-list>
+    <ion-list-header>
+      <ion-label>Cuentas Existentes</ion-label>
+    </ion-list-header>
+
+    <!-- Lista de cuentas existentes -->
     <ion-item *ngFor="let account of accounts">
-      <ion-label>ID {{ account.id }}</ion-label>
-      <ion-label>Precio Total: {{ account.precioTotal }}</ion-label>
-      <ion-label>Pagado: {{ account.pagado ? 'Sí' : 'No' }}</ion-label>
-      <ion-label>Id de Mesa {{ account.id_mesa }}</ion-label>
-      <ion-button (click)="markAsPaid(account.id)">Marcar como Pagado</ion-button>
+      <ion-label>
+        <h2>ID: {{ account.id }}</h2>
+        <p>Precio: {{ account.precioTotal }} €</p>
+        <p>Pagado: {{ account.pagado ? 'Sí' : 'No' }}</p>
+        <p>Mesa {{ account.mesa.id }} - {{ account.mesa.ubicacion }}</p>
+      </ion-label>
+      <ion-button color="success" (click)="cobrar(account.id)">
+        <ion-icon slot="start" name="cash-outline"></ion-icon>
+        Cobrar
+      </ion-button>
     </ion-item>
   </ion-list>
-
 </ion-content>

@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-title>Cobro de la cuenta {{accountId}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Detalles de la Cuenta {{accountId}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngFor="let order of orders">
+        <ion-item-group>
+          <ion-item-divider color="light">
+            <ion-label>Pedido {{order.id}} </ion-label>
+            
+          </ion-item-divider>
+          <ion-item *ngFor="let product of order.products">
+            <ion-label>{{ product.nombreProducto }}</ion-label>
+            <ion-label>{{ product.precio }} €</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Precio Pedido</strong></ion-label>
+            <ion-label>{{ order.precio }} €</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="secondary">
+    <ion-title>Precio TOTAL: {{totalPrecioPedidos}} €</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="success" style="background-color: rgb(68, 105, 166);" expand="full"  (click)="markAsPaid(accountId)">
+        <ion-icon slot="start" name="cash-outline"></ion-icon>
+        Cobrar
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
