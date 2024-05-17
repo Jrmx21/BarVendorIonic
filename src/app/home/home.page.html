@@ -17,8 +17,8 @@
 
   <ion-content>
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-      <ion-fab-button  color="tertiary" (click)="openCart(true)">
-        <ion-icon  name="cart"></ion-icon>
+      <ion-fab-button color="tertiary" (click)="openCart(true)">
+        <ion-icon name="cart"></ion-icon>
       </ion-fab-button>
     </ion-fab>
     <ion-fab slot="fixed" vertical="bottom" horizontal="start">
@@ -109,7 +109,10 @@
           <ion-title>Carrito</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="openCart(false); actualizarCarro();">
-              <ion-icon slot="icon-only" name="return-down-back-outline"></ion-icon>
+              <ion-icon
+                slot="icon-only"
+                name="return-down-back-outline"
+              ></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
@@ -123,26 +126,84 @@
         </ion-list>
         <ion-list *ngIf="cartItems.length > 0">
           <ion-item>
-            <ion-button color="danger" expand="full" (click)="clearCart();actualizarCarro()">
+            <ion-button
+              color="danger"
+              expand="full"
+              (click)="clearCart();actualizarCarro()"
+            >
               <ion-icon slot="start" name="close-circle-outline"></ion-icon>
               Vaciar Carrito
             </ion-button>
           </ion-item>
           <ion-item *ngFor="let item of cartItems; let i = index">
-            <ion-label>{{ item.nombreProducto }}{{ item.quantity > 1 ? ' x' + item.quantity : '' }}</ion-label>
+            <ion-label
+              >{{ item.nombreProducto }}{{ item.quantity > 1 ? ' x' +
+              item.quantity : '' }}</ion-label
+            >
             <ion-label slot="end">{{ (item.precio).toFixed(2) }}€</ion-label>
-            <ion-button fill="outline" color="medium" (click)="removeItem(i)">-</ion-button>
-            <ion-button fill="outline" color="medium" (click)="addProduct(item)">+</ion-button>
+            <ion-button fill="outline" color="medium" (click)="removeItem(i)"
+              >-</ion-button
+            >
+            <ion-button fill="outline" color="medium" (click)="addProduct(item)"
+              >+</ion-button
+            >
           </ion-item>
         </ion-list>
-        <ion-item>
-          <ion-label>Cuentas Abiertas</ion-label>
-          <ion-select [(ngModel)]="cuentaSelected" required>
-            <ion-select-option *ngFor="let cuenta of cuentasAbiertas" [value]="cuenta">
-              {{ cuenta.id }} {{ cuenta.mesa.ubicacion }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
+        <ion-segment>
+          <ion-segment-button
+            value="interior"
+            (click)="interior = true"
+            [ngClass]="{ 'selected': interior }"
+          >
+            <ion-label>Interior</ion-label>
+          </ion-segment-button>
+          <ion-segment-button
+            value="exterior"
+            (click)="interior = false"
+            [ngClass]="{ 'selected': !interior }"
+          >
+            <ion-label>Exterior</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        <ion-grid >
+          <ion-row *ngIf="interior">
+            <ion-col size="6" *ngFor="let cuenta of cuentasAbiertas">
+              <ion-card
+                *ngIf="cuenta.mesa.ubicacion === 'INTERIOR'"
+                [ngClass]="{ 'selected': cuentaSelected?.id === cuenta.id }"
+                (click)="selectCuenta(cuenta)"
+              >
+                <ion-card-content class="cuenta-card-content">
+                  <ion-icon name="wallet-outline" size="large"></ion-icon>
+                  <div class="cuenta-info">
+                    <p>Cuenta {{ cuenta.id }}</p>
+                    <p>Mesa: {{cuenta.mesa.id}} {{ cuenta.mesa.ubicacion }}</p>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="!interior">
+            <ion-col size="6" *ngFor="let cuenta of cuentasAbiertas">
+              <ion-card
+                *ngIf="cuenta.mesa.ubicacion === 'EXTERIOR'"
+                [ngClass]="{ 'selected': cuentaSelected?.id === cuenta.id }"
+                (click)="selectCuenta(cuenta)"
+              >
+                <ion-card-content class="cuenta-card-content">
+                  <ion-icon name="wallet-outline" size="large"></ion-icon>
+                  <div class="cuenta-info">
+                    <p>Cuenta: {{ cuenta.id }}</p>
+                    <p>Mesa: {{cuenta.mesa.id}} {{ cuenta.mesa.ubicacion }}</p>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        
+        </ion-grid>
+        
+         
         <ion-item>
           <ion-label>Seleccione Usuario:</ion-label>
           <ion-select [(ngModel)]="userSelected" required>
@@ -151,7 +212,12 @@
             </ion-select-option>
           </ion-select>
         </ion-item>
-        <ion-button expand="block" color="success" (click)="placeOrder()" [disabled]="!cuentaSelected || !userSelected">
+        <ion-button
+          expand="block"
+          color="success"
+          (click)="placeOrder()"
+          [disabled]="!cuentaSelected || !userSelected"
+        >
           Realizar pedido
         </ion-button>
       </ion-content>

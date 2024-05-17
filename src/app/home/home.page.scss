@@ -40,3 +40,31 @@ ion-label {
 ion-segment-button {
   min-width: 120px; /* Ajusta según sea necesario */
 }
+.cuenta-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cuenta-info {
+  margin-left: 10px;
+  
+}
+.cuenta-info p {
+  font-size: large;
+  
+}
+
+ion-card.selected {
+  background-color: var(--ion-color-primary);
+  color: white; /* Cambiar el texto a blanco para contraste */
+}
+
+ion-label {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin: 10px 0;
+  display: block;
+}
+

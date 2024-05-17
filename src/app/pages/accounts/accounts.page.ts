@@ -88,6 +88,12 @@ export class AccountsPage implements OnInit {
     if (account) {
       account.pagado = true;
       this.accountService.markAccountAsPaid(accountId).subscribe(() => {});
+     
+      this.mesaSelected.ocupada = false;
+      this.tableService.updateTable(this.mesaSelected.id, this.mesaSelected).subscribe(() => {  
+        this.loadAccounts();
+        this.loadClosedAccounts();
+      });
     }
   }
 }

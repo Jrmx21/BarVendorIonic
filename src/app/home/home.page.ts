@@ -23,7 +23,7 @@ export class HomePage {
   users: any;
   categoria = '';
   userSelected: any;
-
+  interior: boolean = true;
   constructor(
     private orderService: OrderService,
     private userService: UserService,
@@ -112,6 +112,10 @@ export class HomePage {
         }
       );
     }
+  }
+
+   selectCuenta(cuenta: any) {
+    this.cuentaSelected = cuenta;
   }
   handleRefresh(event: any) {
     setTimeout(() => {

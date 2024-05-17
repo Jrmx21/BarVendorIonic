@@ -26,18 +26,20 @@
           <ion-label>Interior</ion-label>
         </ion-segment-button>
         <ion-segment-button value="EXTERIOR">
-          <ion-label>Exterior</ion-label></ion-segment-button>
+          <ion-label>Exterior</ion-label>
+        </ion-segment-button>
       </ion-segment>
 
       <!-- Selector gráfico de mesas -->
       <ion-grid>
         <ion-row>
           <ion-col size="6" *ngFor="let table of filteredTables">
-            <ion-card (click)="selectTable(table)" [color]="mesaSelected?.id === table.id ? 'tertiary' : 'light'">
+            <ion-card [color]="table.ocupada ? 'danger' : (mesaSelected?.id === table.id ? 'tertiary' : 'light')"
+                      (click)="selectTable(table)" [disabled]="table.ocupada">
               <ion-card-content class="table-card-content">
                 <ion-icon name="restaurant-outline" size="large"></ion-icon>
                 <div class="table-info">
-                  <p>ID: {{ table.id }}</p>
+                  <p>Mesa: {{ table.id }}</p>
                   <p>Comensales: {{ table.espacio_comensales }}</p>
                 </div>
               </ion-card-content>
@@ -46,7 +48,7 @@
         </ion-row>
       </ion-grid>
 
-      <ion-button expand="block" color="primary" (click)="createAccount()">
+      <ion-button expand="block" color="primary" [disabled]="!mesaSelected" (click)="createAccount()">
         <ion-icon slot="start" name="add-circle-outline"></ion-icon>
         Crear Cuenta
       </ion-button>
@@ -55,7 +57,7 @@
 
   <ion-list>
     <ion-list-header>
-      <ion-label>Cuentas Existentes</ion-label>
+      <ion-label>Cuentas Abiertas</ion-label>
     </ion-list-header>
 
     <!-- Lista de cuentas existentes -->
