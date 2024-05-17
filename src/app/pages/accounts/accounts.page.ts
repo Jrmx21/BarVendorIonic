@@ -59,22 +59,26 @@ export class AccountsPage implements OnInit {
 
   createAccount() {
     if (this.mesaSelected) {
+      // Cambiar el estado de ocupada a true para la mesa seleccionada
+      this.mesaSelected.ocupada = true;
+  
       const newAccount = {
         precioTotal: 0,
         pagado: false,
         mesa: this.mesaSelected
       };
-
+  
       this.accountService.createAccount(newAccount).subscribe(() => {
         this.loadAccounts();
-        this.newAccount = { precioTotal: 0, pagado: false };
+        // Reiniciar valores después de crear la cuenta
+        this.newAccount = { pagado: false, ocupada: false, ubicacion: '' };
         this.mesaSelected = null;
       });
     } else {
       console.error('Error: No se ha seleccionado ninguna mesa.');
     }
   }
-
+  
   async cobrar(accountId: number) {
     const modal = await this.modalController.create({
       component: DetallesCuentaModalComponent,
