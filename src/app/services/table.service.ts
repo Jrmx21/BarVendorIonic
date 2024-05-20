@@ -20,4 +20,5 @@ export class TableService {
   updateTable(tableId: number, tableData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${tableId}`, tableData);
   }
+  
 }

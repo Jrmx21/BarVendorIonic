@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { AccountService } from 'src/app/services/account.service';
+import { TableService } from 'src/app/services/table.service';
 
 @Component({
   selector: 'app-detalles-cuenta-modal',
@@ -17,7 +18,8 @@ export class DetallesCuentaModalComponent  implements OnInit {
   constructor(
     private alertController: AlertController,
     private modalController: ModalController,
-    private accountService:  AccountService // Inyecta tu servicio de API
+    private accountService:  AccountService, // Inyecta tu servicio de API,
+    private tableService: TableService
   ) {}
 
   ngOnInit() {
@@ -75,19 +77,29 @@ export class DetallesCuentaModalComponent  implements OnInit {
         }, {
           text: 'Sí',
           handler: () => {
-            this.accountService.markAccountAsPaid(accountId).subscribe(() => {
-              console.log('La cuenta ha sido marcada como pagada correctamente.');
-              // Aquí puedes realizar otras acciones después de que la cuenta se marque como pagada en el servidor
-            }, (error) => {
-              console.error('Error al marcar la cuenta como pagada:', error);
-              // Aquí puedes manejar errores de manera apropiada
-            });
+            const account = this.accounts.find((a) => a.id === accountId);
+            if (account) {
+              account.pagado = true;
+              this.accountService.markAccountAsPaid(accountId).subscribe(() => {
+                if (account.mesa) {
+                  account.mesa.ocupada = false;
+                  account.precioTotal= this.totalPrecioPedidos;
+                  console.log("MESA");
+                  console.log(account.mesa);
+                  this.tableService.updateTable(account.mesa.id, account.mesa).subscribe(() => {
+                    this.loadAccounts();
+                  });
+                } else {
+                  this.loadAccounts();
+                  console.log("No lo hizo");
+                }
+              });
+            }
           }
         }
       ]
     });
-  
+
     await alert.present();
   }
-  
 }
