@@ -1,4 +1,5 @@
 // login.page.ts
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -11,49 +12,24 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  username: string = '';
-  password: string = '';
 
-  constructor(
-    private toastController: ToastController,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  username: string="";
+  password: string="";
+  errorMessage: string="";
 
-  async presentToast(message: string, color: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 1500,
-      position: 'bottom',
-      color: color,
-    });
+  constructor(private authService: AuthService, private router: Router) {}
 
-    await toast.present();
-  }
   login() {
-    this.authService.login(this.username, this.password).subscribe(
-      (response) => {
-        console.log("RESPUESTA DEL SERVIDOR", response);
-        // Verifica si la respuesta no es nula
-        if (response) {
-         
-          if (response.role === 'Camarero') {
-            this.router.navigate(['/home']);
-            this.presentToast('Inicio de sesión exitoso', 'success');
-          } else {
-            console.error('El usuario no tiene el rol adecuado');
-            this.presentToast('No tienes permisos para acceder', 'danger');
-          }
-        } else {
-          console.error('Respuesta inválida del servidor');
-          this.presentToast('Inicio de sesión fallido', 'danger');
-        }
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        // Almacena el token en localStorage o donde prefieras
+        localStorage.setItem('authToken', response.token);
+        this.router.navigate(['/home']); // Redirige a la página principal
       },
-      (error) => {
-        // Manejar errores aquí
-        console.error('Error en el servidor', error);
-        this.presentToast('Fallo en el servidor', 'danger');
+      error: (error) => {
+        this.errorMessage = 'Credenciales inválidas';
+        console.log(error);
       }
-    );
+    });
   }
 }

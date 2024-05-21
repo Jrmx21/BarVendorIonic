@@ -1,16 +1,31 @@
-// auth.service.ts
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private loginUrl = 'http://localhost:6969/api/login';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>('http://localhost:6969/login', { username, password });
+    const body = { username, password };
+    localStorage.setItem('username', username);
+    return this.http.post(this.loginUrl, body, { responseType: 'text' }).pipe(
+      catchError((error: any) => {
+        return throwError(() => error); // Transforma el error para que el componente lo maneje
+      })
+    );
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      localStorage.removeItem('username');
+    }
+    return of(!!token); // Devuelve true si el token existe, false si no
   }
 }
