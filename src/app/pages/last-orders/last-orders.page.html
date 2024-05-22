@@ -4,29 +4,33 @@
       Tus últimos pedidos
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button href="/"> <ion-icon name="return-down-back-outline" ></ion-icon>
-      </ion-button></ion-buttons>
+      <ion-button href="/"> <ion-icon name="return-down-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-  
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list>
     <ion-item *ngFor="let pedido of ultimosPedidos">
       <ion-label>
         <h2>Pedido {{ pedido.id }}</h2>
-        <p><strong>Usuario:</strong> {{ pedido.user.id }}</p>
-        <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+        <h3>Mesa {{ pedido.cuenta.mesa.id }}</h3>
         <p><strong>Notas:</strong> {{ pedido.notas }}</p>
-        <p><strong>Precio Total:</strong> {{ pedido.precio }}</p>
-        <!-- Si es necesario, puedes mostrar más campos aquí -->
+        <p><strong>Precio Total:</strong> {{ pedido.precio }}€</p>
+        <ng-container *ngIf="!soloBebidasYEntrantes(pedido)">
+          <p *ngIf="pedido.listoParaServir" style="background-color: chartreuse;"><strong>Listo</strong></p>
+          <p *ngIf="!pedido.listoParaServir" style="background-color: rgb(249, 158, 39);"><strong>En Marcha</strong></p>
+        </ng-container>
         <ion-list>
+          Productos
           <ion-item *ngFor="let producto of pedido.products">
             <ion-label>
               <h3>{{ producto.nombreProducto }}</h3>
               <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
-              <p><strong>Precio:</strong> {{ producto.precio }}</p>
-              <!-- Agrega más campos si es necesario -->
             </ion-label>
           </ion-item>
         </ion-list>

@@ -10,6 +10,9 @@
       <ion-icon slot="start" name="receipt-outline"></ion-icon>
       Tus últimos pedidos
     </ion-item>
+    <ion-button expand="block" color="danger" (click)="logout()">
+      Cerrar Sesión
+    </ion-button>
   </ion-content>
 </ion-menu>
 <div class="ion-page" id="main-content">
@@ -65,12 +68,6 @@
           <ion-label>Pescados</ion-label>
         </ion-segment-button>
         <ion-segment-button
-          style="background-color: rgb(205, 98, 255); color: black"
-          value="vinos"
-        >
-          <ion-label>Vinos</ion-label>
-        </ion-segment-button>
-        <ion-segment-button
           style="background-color: rgb(255, 236, 127); color: black"
           value="carnes"
         >
@@ -84,6 +81,7 @@
         </ion-segment-button>
       </ion-row>
     </ion-segment>
+    
 
     <ion-list>
       <ion-card *ngFor="let product of products">
@@ -149,7 +147,7 @@
             >
           </ion-item>
         </ion-list>
-        <ion-segment>
+        <ion-segment value="interior">
           <ion-segment-button
             value="interior"
             (click)="interior = true"
@@ -161,6 +159,7 @@
             value="exterior"
             (click)="interior = false"
             [ngClass]="{ 'selected': !interior }"
+            
           >
             <ion-label>Exterior</ion-label>
           </ion-segment-button>

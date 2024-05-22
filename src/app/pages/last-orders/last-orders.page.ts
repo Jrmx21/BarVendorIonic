@@ -8,21 +8,37 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class LastOrdersPage implements OnInit {
   ultimosPedidos: any[] = [];
-  usuarioSeleccionadoId: number = 1; // ID del usuario seleccionado
+  usuarioSeleccionado: string | null = ""; // ID del usuario seleccionado
 
   constructor(private orderService: OrderService) { }
 
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.usuarioSeleccionado = localStorage.getItem('username');
+      this.loadOrders();
+      event.target.complete();
+    }, 2000);
+  }
+
+  soloBebidasYEntrantes(pedido: any): boolean {
+    return pedido.products.every((producto: any) =>
+      producto.categoria === 'Bebida' || producto.categoria === 'Entrante');
+  }
+
   ngOnInit(): void {
-    // Llama al método del servicio para obtener todos los pedidos.
+    this.usuarioSeleccionado = localStorage.getItem('username');
+    this.loadOrders();
+  }
+
+  loadOrders() {
     this.orderService.getOrders()
       .subscribe(
         data => {
           // Filtra los pedidos para obtener solo los del usuario seleccionado.
-          this.ultimosPedidos = data.filter((pedido:any) => pedido.user.id === this.usuarioSeleccionadoId);
-          // Ordena los pedidos por fecha en orden descendente.
-          this.ultimosPedidos.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-          // Limita la lista a los últimos 10 pedidos.
-          this.ultimosPedidos = this.ultimosPedidos.slice(0, 10);
+          this.ultimosPedidos = data.filter((pedido: any) => pedido.user.username === this.usuarioSeleccionado);
+          // Limita la lista a los últimos 30 pedidos sin orden específico.
+          this.ultimosPedidos.reverse();
+          this.ultimosPedidos = this.ultimosPedidos.slice(-30);
           console.log(this.ultimosPedidos); // Puedes ver los datos en la consola para verificar que se hayan filtrado correctamente.
         },
         error => {
@@ -30,6 +46,4 @@ export class LastOrdersPage implements OnInit {
         }
       );
   }
-
-
 }

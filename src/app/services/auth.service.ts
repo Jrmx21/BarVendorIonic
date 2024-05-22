@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -9,7 +11,7 @@ import { catchError, tap } from 'rxjs/operators';
 export class AuthService {
   private loginUrl = 'http://localhost:6969/api/login';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router :Router) {}
 
   login(username: string, password: string): Observable<any> {
     const body = { username, password };
@@ -27,5 +29,11 @@ export class AuthService {
       localStorage.removeItem('username');
     }
     return of(!!token); // Devuelve true si el token existe, false si no
+  }
+  logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('username');
+    //redirige a login
+    this.router.navigate(['/login']);
   }
 }

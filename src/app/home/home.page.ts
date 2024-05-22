@@ -7,6 +7,7 @@ import { OrderService } from '../services/order.service';
 import { AccountService } from '../services/account.service';
 import { UserService } from '../services/user.service';
 import { IonSegmentCustomEvent } from '@ionic/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,8 @@ notasPedido: string = 'Sin notas';
     private cartService: CartService,
     private productService: ProductService,
     private modalController: ModalController,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private authService: AuthService
   ) {}
   cartOpen: boolean = false;
   openCart(isOpen: boolean) {
@@ -47,6 +49,9 @@ notasPedido: string = 'Sin notas';
         console.error('Error al obtener productos', error);
       }
     );
+  }
+  logout() {
+    this.authService.logout();
   }
   ngOnInit() {
     this.userService.getAllUsers().subscribe((users) => {
