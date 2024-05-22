@@ -205,18 +205,14 @@
         
          
         <ion-item>
-          <ion-label>Seleccione Usuario:</ion-label>
-          <ion-select [(ngModel)]="userSelected" required>
-            <ion-select-option *ngFor="let user of users" [value]="user">
-              {{ user.id }} {{ user.username }}
-            </ion-select-option>
-          </ion-select>
+          <ion-label>Notas Pedido</ion-label>
+          <ion-input [(ngModel)]="notasPedido"></ion-input>
         </ion-item>
         <ion-button
           expand="block"
           color="success"
           (click)="placeOrder()"
-          [disabled]="!cuentaSelected || !userSelected"
+          [disabled]="!cuentaSelected"
         >
           Realizar pedido
         </ion-button>

@@ -24,6 +24,7 @@ export class HomePage {
   categoria = '';
   userSelected: any;
   interior: boolean = true;
+notasPedido: string = 'Sin notas';
   constructor(
     private orderService: OrderService,
     private userService: UserService,
@@ -52,6 +53,7 @@ export class HomePage {
       this.users = users;
     });
 
+    this.userSelected= localStorage.getItem('username');
     // Obtener cuentas abiertas del usuario
     this.accountService.getOpenAccounts().subscribe(
       (cuentas) => {
@@ -122,7 +124,7 @@ export class HomePage {
       this.userService.getAllUsers().subscribe((users) => {
         this.users = users;
       });
-
+      this.userSelected= localStorage.getItem('username');
       // Obtener cuentas abiertas del usuario
       this.accountService.getOpenAccounts().subscribe(
         (cuentas) => {
@@ -147,13 +149,26 @@ export class HomePage {
       event.target.complete();
     }, 800);
   }
+  
   placeOrder() {
     let precioTotalPedido = this.calcularPrecioTotal();
+  
+    // Filtra el usuario seleccionado de la lista de usuarios
+    let selectedUser = this.users.find((user:any) => user.username === this.userSelected);
+  
+    if (!selectedUser) {
+      console.error('Usuario no encontrado');
+      return;
+    }
+    if(this.notasPedido == null|| this.notasPedido == ''){
+      this.notasPedido = 'Sin notas';
+    }
     let pedido = {
       fecha: new Date().toISOString(),
-      notas: 'Notas del pedido',
-      precio: this.calcularPrecioTotal().toString(),
-      user: this.userSelected,
+      notas: this.notasPedido,
+      precio: precioTotalPedido.toString(),
+      user: selectedUser,
+      listoParaServir: false,
       cuenta: this.cuentaSelected,
       products: this.cartItems.map((item) => ({
         id: item.id,
@@ -163,15 +178,14 @@ export class HomePage {
         precio: item.precio,
         existencias: item.existencias,
       })),
-    }
-    
+    };
+  
     // Envía una solicitud HTTP para realizar el pedido con los datos del pedido
     this.orderService.placeOrder(pedido).subscribe(
       (response) => {
         console.log(pedido);
         console.log('Pedido realizado con éxito:', response);
         // Limpia el carrito después de realizar el pedido
-        
         this.cartService.clearCart();
         // Actualiza la lista de elementos del carrito
         this.actualizarCarro();
@@ -182,7 +196,7 @@ export class HomePage {
       }
     );
   }
-
+  
   removeItem(index: number) {
     // Verificar si el índice proporcionado está dentro de los límites del array
   if (index >= 0 && index < this.cartItems.length) {
