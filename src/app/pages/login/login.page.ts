@@ -17,17 +17,28 @@ export class LoginPage {
   password: string="";
   errorMessage: string="";
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService,private toastController:ToastController ,private router: Router) {}
 
+  async presentToast(message: string, color: 'success' | 'warning' | 'danger') {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1000,
+      position: 'top',
+      color: color
+    });
+    toast.present();
+  }
   login() {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
         // Almacena el token en localStorage o donde prefieras
         localStorage.setItem('authToken', response.token);
         this.router.navigate(['/home']); // Redirige a la página principal
+        this.presentToast('Inicio de sesión exitoso', 'success');
       },
       error: (error) => {
         this.errorMessage = 'Credenciales inválidas';
+        this.presentToast('Credenciales inválidas', 'danger');
         console.log(error);
       }
     });

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { AccountService } from 'src/app/services/account.service';
 import { TableService } from 'src/app/services/table.service';
 
@@ -19,7 +19,8 @@ export class DetallesCuentaModalComponent  implements OnInit {
     private alertController: AlertController,
     private modalController: ModalController,
     private accountService:  AccountService, // Inyecta tu servicio de API,
-    private tableService: TableService
+    private tableService: TableService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -62,6 +63,15 @@ export class DetallesCuentaModalComponent  implements OnInit {
       this.accounts = accounts;
     });
   }
+  async presentToast(message: string, color: 'success' | 'warning' | 'danger') {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1000,
+      position: 'top',
+      color: color
+    });
+    toast.present();
+  }
   async markAsPaid(accountId: number) {
     const alert = await this.alertController.create({
       header: 'Confirmación',
@@ -88,10 +98,11 @@ export class DetallesCuentaModalComponent  implements OnInit {
                   console.log(account.mesa);
                   this.tableService.updateTable(account.mesa.id, account.mesa).subscribe(() => {
                     this.loadAccounts();
+                    this.presentToast('Cuenta pagada', 'success');
                   });
                 } else {
                   this.loadAccounts();
-                  console.log("No lo hizo");
+                 this.presentToast('Error al marcar la cuenta como pagada', 'danger');
                 }
               });
             }

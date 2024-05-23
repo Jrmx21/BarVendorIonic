@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { DetallesCuentaModalComponent } from 'src/app/components/detalles-cuenta-modal/detalles-cuenta-modal.component';
 import { AccountService } from 'src/app/services/account.service';
 import { TableService } from 'src/app/services/table.service';
@@ -25,9 +25,19 @@ export class AccountsPage implements OnInit {
   constructor(
     private accountService: AccountService,
     private tableService: TableService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private toastController: ToastController
   ) {}
 
+    async presentToast(message: string, color: 'success' | 'warning' | 'danger') {
+      const toast = await this.toastController.create({
+        message: message,
+        duration: 1000,
+        position: 'top',
+        color: color
+      });
+      toast.present();
+    }
   ngOnInit(): void {
     this.loadAccounts();
     this.tableService.getAllTables().subscribe((tables) => {
@@ -126,7 +136,6 @@ export class AccountsPage implements OnInit {
             });
         } else {
           this.loadAccounts();
-          console.log('No lo hiso');
           this.loadClosedAccounts();
         }
       });

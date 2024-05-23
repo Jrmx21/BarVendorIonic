@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { ProductComponent } from '../components/product/product.component';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { CartService } from '../services/cart.service';
 import { OrderService } from '../services/order.service';
 import { AccountService } from '../services/account.service';
@@ -33,7 +33,8 @@ notasPedido: string = 'Sin notas';
     private productService: ProductService,
     private modalController: ModalController,
     private accountService: AccountService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastController: ToastController
   ) {}
   cartOpen: boolean = false;
   openCart(isOpen: boolean) {
@@ -49,6 +50,15 @@ notasPedido: string = 'Sin notas';
         console.error('Error al obtener productos', error);
       }
     );
+  }
+  async presentToast(message: string, color: 'success' | 'warning' | 'danger') {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1000,
+      position: 'top',
+      color: color
+    });
+    toast.present();
   }
   logout() {
     this.authService.logout();
@@ -75,6 +85,7 @@ notasPedido: string = 'Sin notas';
         console.log(data);
       },
       (error) => {
+        this.presentToast('Error al obtener productos', 'danger');
         console.error('Error al obtener productos', error);
       }
     );
@@ -137,6 +148,7 @@ notasPedido: string = 'Sin notas';
           console.log(cuentas);
         },
         (error) => {
+          this.presentToast('Error al obtener cuentas abiertas', 'danger');
           console.error('Error al obtener cuentas abiertas:', error);
         }
       );
@@ -146,6 +158,7 @@ notasPedido: string = 'Sin notas';
           console.log(data);
         },
         (error) => {
+          this.presentToast('Error al obtener productos', 'danger');
           console.error('Error al obtener productos', error);
         }
       );
@@ -163,6 +176,7 @@ notasPedido: string = 'Sin notas';
   
     if (!selectedUser) {
       console.error('Usuario no encontrado');
+      this.presentToast('Usuario no encontrado', 'danger');
       return;
     }
     if(this.notasPedido == null|| this.notasPedido == ''){
@@ -190,6 +204,7 @@ notasPedido: string = 'Sin notas';
       (response) => {
         console.log(pedido);
         console.log('Pedido realizado con éxito:', response);
+        this.presentToast('Pedido realizado con éxito', 'success');
         // Limpia el carrito después de realizar el pedido
         this.cartService.clearCart();
         // Actualiza la lista de elementos del carrito
@@ -197,6 +212,7 @@ notasPedido: string = 'Sin notas';
       },
       (error) => {
         console.error('Error al realizar el pedido:', error);
+        this.presentToast('Error al realizar el pedido', 'danger');
         console.log(pedido);
       }
     );

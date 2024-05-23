@@ -17,13 +17,13 @@
   <ion-list>
     <ion-item *ngFor="let pedido of ultimosPedidos">
       <ion-label>
-        <h2>Pedido {{ pedido.id }}</h2>
-        <h3>Mesa {{ pedido.cuenta.mesa.id }}</h3>
+        <h2>Mesa {{ pedido.cuenta.mesa.id }}</h2>
+        <h3>Pedido {{ pedido.id }}</h3>
         <p><strong>Notas:</strong> {{ pedido.notas }}</p>
         <p><strong>Precio Total:</strong> {{ pedido.precio }}€</p>
         <ng-container *ngIf="!soloBebidasYEntrantes(pedido)">
-          <p *ngIf="pedido.listoParaServir" style="background-color: chartreuse;"><strong>Listo</strong></p>
-          <p *ngIf="!pedido.listoParaServir" style="background-color: rgb(249, 158, 39);"><strong>En Marcha</strong></p>
+          <p *ngIf="pedido.listoParaServir" ><strong style="background-color: chartreuse;">Listo</strong></p>
+          <p *ngIf="!pedido.listoParaServir" ><strong style="background-color: rgb(249, 158, 39);">En Marcha</strong></p>
         </ng-container>
         <ion-list>
           Productos
