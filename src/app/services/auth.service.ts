@@ -9,7 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private loginUrl = 'http://localhost:6969/api/login';
+  private loginUrl = 'https://barvendor-8d5be5ce5941.herokuapp.com/api/login';
 
   constructor(private http: HttpClient,private router :Router) {}
 

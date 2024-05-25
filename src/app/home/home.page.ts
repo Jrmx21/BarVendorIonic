@@ -209,6 +209,7 @@ notasPedido: string = 'Sin notas';
         this.cartService.clearCart();
         // Actualiza la lista de elementos del carrito
         this.actualizarCarro();
+        this.notasPedido = '';
       },
       (error) => {
         console.error('Error al realizar el pedido:', error);
