@@ -34,68 +34,90 @@
     </ion-refresher>
 
     <ion-segment [(ngModel)]="categoria" (ionChange)="segmentChanged($event)">
-      <ion-row>
+      <div class="segment-grid">
         <ion-segment-button
+          class="segment-button"
           style="background-color: rgb(183, 197, 254); color: black"
           value="bebida"
         >
           <ion-label>Bebidas</ion-label>
         </ion-segment-button>
         <ion-segment-button
+          class="segment-button"
           style="background-color: aquamarine; color: black"
           value="postre"
         >
           <ion-label>Postres</ion-label>
         </ion-segment-button>
         <ion-segment-button
+          class="segment-button"
           style="background-color: rgb(159, 255, 127); color: black"
           value="desayunos"
         >
           <ion-label>Desayunos</ion-label>
         </ion-segment-button>
         <ion-segment-button
+          class="segment-button"
           style="background-color: rgb(255, 157, 127); color: black"
           value="entrante"
         >
           <ion-label>Entrantes</ion-label>
         </ion-segment-button>
-      </ion-row>
-      <ion-row>
         <ion-segment-button
+          class="segment-button"
           style="background-color: rgb(255, 127, 240); color: black"
           value="pescados"
         >
           <ion-label>Pescados</ion-label>
         </ion-segment-button>
         <ion-segment-button
+          class="segment-button"
           style="background-color: rgb(255, 236, 127); color: black"
           value="carnes"
         >
           <ion-label>Carnes</ion-label>
         </ion-segment-button>
         <ion-segment-button
-          style="background-color: rgb(250, 250, 250); color: black"
+        class="segment-button"
+        style="background-color: rgb(140, 127, 255); color: black"
+        value="Serranitos"
+      >
+        <ion-label>Serranitos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button
+      class="segment-button"
+      style="background-color: rgb(127, 255, 172); color: black"
+      value="Montaditos"
+    >
+      <ion-label>Montaditos</ion-label>
+    </ion-segment-button>
+        <ion-segment-button
+          class="segment-button"
+          style="background-color: rgb(202, 255, 250); color: black"
           value=""
         >
           <ion-label>TODO</ion-label>
         </ion-segment-button>
-      </ion-row>
+      </div>
     </ion-segment>
     
 
     <ion-list>
       <ion-card *ngFor="let product of products">
-        <ion-card-header (click)="presentProductModal(product)">
+        <ion-card-header>
           <ion-card-title>{{ product.nombreProducto }}</ion-card-title>
           <ion-card-subtitle>{{ product.precio }}€</ion-card-subtitle>
           <ion-card-subtitle *ngIf="!product.existencias" color="warning"
             >NO HAY EXISTENCIAS</ion-card-subtitle
           >
         </ion-card-header>
-
-        <ion-button *ngIf="product.existencias" (click)="addProduct(product)"
-          >Agregar al carrito</ion-button
+        <ion-button color="secondary" (click)="presentProductModal(product)"
+        >Detalles</ion-button
+      >
+        <ion-button color="tertiary" *ngIf="product.existencias" (click)="addProduct(product)"
+          >Añadir</ion-button
         >
+       
       </ion-card>
     </ion-list>
   </ion-content>

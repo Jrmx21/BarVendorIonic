@@ -1,21 +1,70 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
+  <ion-toolbar color="secondary">
+    <ion-title>Inicio de Sesion de Camarero</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form (ngSubmit)="login()">
-    <ion-item>
-      <ion-label position="floating">Username</ion-label>
-      <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
-    </ion-item>
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <div class="logo-container">
+      <img src="assets/icon/favicon.png" alt="App Logo" class="app-logo"/>
+    
+    </div>
+    <ion-text>
+      Administra a tu gusto tu bar!
+    </ion-text>
+    <br>
+    <form (ngSubmit)="login()" class="login-form">
+      <ion-item>
+        <ion-label position="floating">Nombre de Usuario</ion-label>
+        <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+      </ion-item>
 
-    <ion-button expand="full" type="submit">Login</ion-button>
-  </form>
+      <ion-button expand="full" type="submit" color="primary">Iniciar Sesión como Camarero</ion-button>
+    </form>
+    
+  </div>
 </ion-content>
+
+<style>
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+  }
+
+  .logo-container {
+    margin-bottom: 20px;
+  }
+
+  .app-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .login-form ion-item {
+    margin-bottom: 15px;
+  }
+
+  .signup-link {
+    margin-top: 20px;
+  }
+
+  .signup-link ion-text a {
+    color: var(--ion-color-primary);
+    text-decoration: none;
+  }
+</style>

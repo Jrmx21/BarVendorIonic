@@ -1,6 +1,5 @@
 #container {
   text-align: center;
-
   position: absolute;
   left: 0;
   right: 0;
@@ -16,15 +15,14 @@
 #container p {
   font-size: 16px;
   line-height: 22px;
-
   color: #8c8c8c;
-
   margin: 0;
 }
 
 #container a {
   text-decoration: none;
 }
+
 .desayunos { background-color: #FF6347; } /* Tomate */
 .entrantes { background-color: #32CD32; } /* Lima */
 .pescados { background-color: #4682B4; } /* Acero azul */
@@ -34,12 +32,29 @@ ion-segment {
   overflow-x: auto;
   white-space: nowrap;
 }
-ion-label {
-  padding: 0 10px; /* Aumenta el padding si es necesario */
+
+.segment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; /* Ajusta el espacio entre los botones si es necesario */
 }
-ion-segment-button {
-  min-width: 120px; /* Ajusta según sea necesario */
+
+.segment-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Ajusta la altura según sea necesario */
+  min-width: 150px; /* Aumenta el ancho mínimo para evitar cortes en el texto */
 }
+
+.segment-button ion-label {
+  font-size: 16px; /* Ajusta el tamaño de fuente según sea necesario */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%; /* Asegura que el texto ocupe todo el ancho del botón */
+}
+
 .cuenta-card-content {
   display: flex;
   align-items: center;
@@ -49,11 +64,10 @@ ion-segment-button {
 
 .cuenta-info {
   margin-left: 10px;
-  
 }
+
 .cuenta-info p {
   font-size: large;
-  
 }
 
 ion-card.selected {
@@ -67,4 +81,3 @@ ion-label {
   margin: 10px 0;
   display: block;
 }
-

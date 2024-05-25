@@ -17,7 +17,7 @@ export class LastOrdersPage implements OnInit {
       this.usuarioSeleccionado = localStorage.getItem('username');
       this.loadOrders();
       event.target.complete();
-    }, 2000);
+    }, 500);
   }
 
   soloBebidasYEntrantes(pedido: any): boolean {
