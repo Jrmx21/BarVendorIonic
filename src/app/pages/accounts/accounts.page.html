@@ -37,10 +37,11 @@
             <ion-card [color]="table.ocupada ? 'danger' : (mesaSelected?.id === table.id ? 'tertiary' : 'light')"
                       (click)="selectTable(table)" [disabled]="table.ocupada">
               <ion-card-content class="table-card-content">
+                <h2><strong>Mesa {{ table.id }}</strong></h2>
                 <ion-icon name="restaurant-outline" size="large"></ion-icon>
                 <div class="table-info">
-                  <p>Mesa: {{ table.id }}</p>
-                  <p>Comensales: {{ table.espacio_comensales }}</p>
+                  
+                  <p>Espacio: {{ table.espacio_comensales }}</p>
                 </div>
               </ion-card-content>
             </ion-card>
@@ -58,7 +59,7 @@
   <ion-list>
     <ion-list-header>
       <ion-label>Cuentas Abiertas</ion-label>
-      <ion-label *ngIf="closedAccounts">No hay ninguna cuenta abierta.</ion-label>
+      <ion-label *ngIf="!closedAccounts">No hay ninguna cuenta abierta.</ion-label>
     </ion-list-header>
    
       
@@ -66,9 +67,9 @@
     <!-- Lista de cuentas existentes -->
     <ion-item *ngFor="let account of accounts">
       <ion-label>
-        <h2>ID: {{ account.id }}</h2>
+        <h2>Mesa {{ account.mesa.id }} - {{ account.mesa.ubicacion }}</h2>
         <p>Pagado: {{ account.pagado ? 'Sí' : 'No' }}</p>
-        <p>Mesa {{ account.mesa.id }} - {{ account.mesa.ubicacion }}</p>
+        <p>Nº de Cuenta {{account.id}}</p>
       </ion-label>
       <ion-button color="success" (click)="cobrar(account.id)">
         <ion-icon slot="start" name="cash-outline"></ion-icon>

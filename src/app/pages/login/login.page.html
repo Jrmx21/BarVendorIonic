@@ -22,7 +22,10 @@
 
       <ion-item>
         <ion-label position="floating">Contraseña</ion-label>
-        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+        <ion-input [type]="passwordType" [(ngModel)]="password" name="password" required><ion-button slot="end" fill="clear" size="small" color="primary" (click)="togglePasswordVisibility()">
+          <ion-icon [name]="passwordIcon"></ion-icon>
+        </ion-button></ion-input>
+        
       </ion-item>
 
       <ion-button expand="full" type="submit" color="primary">Iniciar Sesión como Camarero</ion-button>

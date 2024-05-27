@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { ModalController, Platform, ToastController } from '@ionic/angular';
 import { DetallesCuentaModalComponent } from 'src/app/components/detalles-cuenta-modal/detalles-cuenta-modal.component';
 import { AccountService } from 'src/app/services/account.service';
 import { TableService } from 'src/app/services/table.service';
@@ -26,7 +27,9 @@ export class AccountsPage implements OnInit {
     private accountService: AccountService,
     private tableService: TableService,
     private modalController: ModalController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private platform: Platform,
+    private router: Router
   ) {}
 
     async presentToast(message: string, color: 'success' | 'warning' | 'danger') {
@@ -39,6 +42,9 @@ export class AccountsPage implements OnInit {
       toast.present();
     }
   ngOnInit(): void {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.router.navigate(['/home']);
+    });
     this.loadAccounts();
     this.tableService.getAllTables().subscribe((tables) => {
       this.arrayMesas = tables;

@@ -111,12 +111,23 @@
             >NO HAY EXISTENCIAS</ion-card-subtitle
           >
         </ion-card-header>
-        <ion-button color="secondary" (click)="presentProductModal(product)"
-        >Detalles</ion-button
-      >
-        <ion-button color="tertiary" *ngIf="product.existencias" (click)="addProduct(product)"
-          >Añadir</ion-button
-        >
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <!-- Primera mitad de la pantalla -->
+              <ion-button color="secondary" expand="full" (click)="presentProductModal(product)">
+                Detalles
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <!-- Segunda mitad de la pantalla -->
+              <ion-button color="tertiary" *ngIf="product.existencias" expand="full" (click)="addProduct(product)">
+                Añadir
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      
        
       </ion-card>
     </ion-list>
@@ -226,8 +237,11 @@
         
          
         <ion-item>
-          <ion-label>Notas Pedido</ion-label>
-          <ion-input [(ngModel)]="notasPedido"></ion-input>
+          <ion-label for="notasPedido" position="floating">Notas Pedido</ion-label>
+          <ion-input id="notasPedido" [(ngModel)]="notasPedido" name="notasPedido"> <ion-button slot="end" color="medium" fill="clear" size="default" (click)="clearNotasPedido()">
+            <ion-icon name="close-circle"></ion-icon>
+          </ion-button></ion-input>
+          
         </ion-item>
         <ion-button
           expand="block"

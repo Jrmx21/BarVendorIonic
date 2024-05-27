@@ -16,6 +16,8 @@ export class LoginPage {
   username: string="";
   password: string="";
   errorMessage: string="";
+  passwordType: string="password";
+  passwordIcon: string="eye-off";
 
   constructor(private authService: AuthService,private toastController:ToastController ,private router: Router) {}
 
@@ -42,5 +44,14 @@ export class LoginPage {
         console.log(error);
       }
     });
+  }
+  togglePasswordVisibility() {
+    if (this.passwordType === 'password') {
+      this.passwordType = 'text';
+      this.passwordIcon = 'eye';
+    } else {
+      this.passwordType = 'password';
+      this.passwordIcon = 'eye-off';
+    }
   }
 }

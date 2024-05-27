@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { ProductComponent } from '../components/product/product.component';
-import { ModalController, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { CartService } from '../services/cart.service';
 import { OrderService } from '../services/order.service';
 import { AccountService } from '../services/account.service';
@@ -15,7 +15,6 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
   cartItems: any[] = [];
   products: any[] = [];
   mesaSelected: number = 1;
@@ -25,7 +24,7 @@ export class HomePage {
   categoria = '';
   userSelected: any;
   interior: boolean = true;
-notasPedido: string = 'Sin notas';
+  notasPedido: string = '';
   constructor(
     private orderService: OrderService,
     private userService: UserService,
@@ -34,13 +33,14 @@ notasPedido: string = 'Sin notas';
     private modalController: ModalController,
     private accountService: AccountService,
     private authService: AuthService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertController: AlertController
   ) {}
   cartOpen: boolean = false;
   openCart(isOpen: boolean) {
     this.cartOpen = isOpen;
   }
-  segmentChanged(event:any) {
+  segmentChanged(event: any) {
     this.productService.getProductsByCategory(this.categoria).subscribe(
       (data) => {
         this.products = data;
@@ -56,19 +56,39 @@ notasPedido: string = 'Sin notas';
       message: message,
       duration: 1000,
       position: 'top',
-      color: color
+      color: color,
     });
     toast.present();
   }
-  logout() {
-    this.authService.logout();
+ async logout() {
+    const alert = await this.alertController.create({
+      header: 'Cerrar Sesión',
+      message: '¿Seguro que quieres cerrar sesión?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Logout cancelado');
+          }
+        }, {
+          text: 'Cerrar Sesión',
+          handler: () => {
+            this.authService.logout();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
   ngOnInit() {
     this.userService.getAllUsers().subscribe((users) => {
       this.users = users;
     });
 
-    this.userSelected= localStorage.getItem('username');
+    this.userSelected = localStorage.getItem('username');
     // Obtener cuentas abiertas del usuario
     this.accountService.getOpenAccounts().subscribe(
       (cuentas) => {
@@ -103,36 +123,44 @@ notasPedido: string = 'Sin notas';
     return await modal.present();
   }
   addProduct(producto: any) {
-      this.cartItems.push(producto);
-    
+    this.cartItems.push(producto);
+    this.presentToast(producto.nombreProducto + ' añadido.', 'success');
     console.log(this.cartItems);
   }
-  
-  
+clearNotasPedido(){
+  this.notasPedido = '';
+}
   calcularPrecioTotal(): number {
     let total = 0;
     for (const item of this.cartItems) {
       total += item.precio;
-      
     }
-    total= Math.round(total * 100) / 100;
+    total = Math.round(total * 100) / 100;
     return Math.round(total * 100) / 100; // Redondea a dos decimales
   }
   sumarPrecioTotalCuenta(precioTotalPedido: number) {
     if (this.cuentaSelected && this.cuentaSelected.precioTotal) {
       this.cuentaSelected.precioTotal += precioTotalPedido;
-      this.accountService.updateAccount(this.cuentaSelected.id, this.cuentaSelected).subscribe(
-        (response) => {
-          console.log('Precio total de la cuenta actualizado con éxito:', response);
-        },
-        (error) => {
-          console.error('Error al actualizar el precio total de la cuenta:', error);
-        }
-      );
+      this.accountService
+        .updateAccount(this.cuentaSelected.id, this.cuentaSelected)
+        .subscribe(
+          (response) => {
+            console.log(
+              'Precio total de la cuenta actualizado con éxito:',
+              response
+            );
+          },
+          (error) => {
+            console.error(
+              'Error al actualizar el precio total de la cuenta:',
+              error
+            );
+          }
+        );
     }
   }
 
-   selectCuenta(cuenta: any) {
+  selectCuenta(cuenta: any) {
     this.cuentaSelected = cuenta;
   }
   handleRefresh(event: any) {
@@ -140,7 +168,7 @@ notasPedido: string = 'Sin notas';
       this.userService.getAllUsers().subscribe((users) => {
         this.users = users;
       });
-      this.userSelected= localStorage.getItem('username');
+      this.userSelected = localStorage.getItem('username');
       // Obtener cuentas abiertas del usuario
       this.accountService.getOpenAccounts().subscribe(
         (cuentas) => {
@@ -167,19 +195,21 @@ notasPedido: string = 'Sin notas';
       event.target.complete();
     }, 800);
   }
-  
+
   placeOrder() {
     let precioTotalPedido = this.calcularPrecioTotal();
-  
+
     // Filtra el usuario seleccionado de la lista de usuarios
-    let selectedUser = this.users.find((user:any) => user.username === this.userSelected);
-  
+    let selectedUser = this.users.find(
+      (user: any) => user.username === this.userSelected
+    );
+
     if (!selectedUser) {
       console.error('Usuario no encontrado');
       this.presentToast('Usuario no encontrado', 'danger');
       return;
     }
-    if(this.notasPedido == null|| this.notasPedido == ''){
+    if (this.notasPedido == null || this.notasPedido == '') {
       this.notasPedido = 'Sin notas';
     }
     let pedido = {
@@ -198,7 +228,7 @@ notasPedido: string = 'Sin notas';
         existencias: item.existencias,
       })),
     };
-  
+
     // Envía una solicitud HTTP para realizar el pedido con los datos del pedido
     this.orderService.placeOrder(pedido).subscribe(
       (response) => {
@@ -218,17 +248,17 @@ notasPedido: string = 'Sin notas';
       }
     );
   }
-  
+
   removeItem(index: number) {
     // Verificar si el índice proporcionado está dentro de los límites del array
-  if (index >= 0 && index < this.cartItems.length) {
-    if (this.cartItems[index].quantity > 1) {
-      this.cartItems[index].quantity--;
-    } else {
-      this.cartItems.splice(index, 1);
+    if (index >= 0 && index < this.cartItems.length) {
+      if (this.cartItems[index].quantity > 1) {
+        this.cartItems[index].quantity--;
+      } else {
+        this.cartItems.splice(index, 1);
+      }
+      this.actualizarCarro();
     }
-    this.actualizarCarro();
-  }
   }
   clearCart() {
     this.cartService.clearCart();
