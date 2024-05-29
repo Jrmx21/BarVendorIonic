@@ -197,7 +197,11 @@
             <ion-label>Exterior</ion-label>
           </ion-segment-button>
         </ion-segment>
-        <ion-grid >
+        <ion-item *ngIf="cuentasAbiertas.length === 0">
+          <ion-label>No hay cuentas abiertas, abre una <a href="/accounts">pulsando aquí</a></ion-label>
+        </ion-item>
+        
+        <ion-grid *ngIf="cuentasAbiertas" >
           <ion-row *ngIf="interior">
             <ion-col size="6" *ngFor="let cuenta of cuentasAbiertas">
               <ion-card

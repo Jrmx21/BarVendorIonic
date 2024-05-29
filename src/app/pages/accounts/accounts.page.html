@@ -59,7 +59,7 @@
   <ion-list>
     <ion-list-header>
       <ion-label>Cuentas Abiertas</ion-label>
-      <ion-label *ngIf="!closedAccounts">No hay ninguna cuenta abierta.</ion-label>
+      <ion-label *ngIf="accounts.length===0">No hay ninguna cuenta abierta.</ion-label>
     </ion-list-header>
    
       
