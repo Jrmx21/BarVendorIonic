@@ -51,7 +51,7 @@ export class LastOrdersPage implements OnInit {
         // Limita la lista a los últimos 30 pedidos sin orden específico.
         this.ultimosPedidos.reverse();
         this.ultimosPedidos = this.ultimosPedidos.slice(-30);
-        console.log(this.ultimosPedidos); // Puedes ver los datos en la consola para verificar que se hayan filtrado correctamente.
+        console.log("Pedidos obtenidos con éxito"); // Puedes ver los datos en la consola para verificar que se hayan filtrado correctamente.
       },
       (error) => {
         console.error('Error al obtener los pedidos:', error);

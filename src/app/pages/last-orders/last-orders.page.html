@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="secondary">
     <ion-title>
-      Tus últimos pedidos
+      Pedidos Cuentas Abiertas
     </ion-title>
     <ion-buttons slot="end">
       <ion-button href="/"> <ion-icon name="return-down-back-outline"></ion-icon>
@@ -16,7 +16,7 @@
   </ion-refresher>
   <ion-list>
     <ion-item *ngFor="let pedido of ultimosPedidos">
-      <ion-label>
+      <ion-label *ngIf="!pedido.cuenta.pagado">
         <h2>Mesa {{ pedido.cuenta.mesa.id }}</h2>
         <h3>Pedido {{ pedido.id }}</h3>
         <p><strong>Notas:</strong> {{ pedido.notas }}</p>
@@ -35,6 +35,7 @@
           </ion-item>
         </ion-list>
       </ion-label>
+
     </ion-item>
   </ion-list>
 </ion-content>
