@@ -1,4 +1,6 @@
 Aplicacion MOVIL + FRONTEND "BARVENDOR"
+PRESENTACIÓN PDF: https://docs.google.com/presentation/d/1FoXfac5rst8z3PSUA7DmonkYFChOw8TdanJqfQ5rUAk/edit?usp=sharing
+
 
 Que es BarVendor? Es una aplicación que sirve para llevar mejor toda la actividad y flujo de trabajo de un bar. Desde el pedido de un comensal hasta la administración del dueño del bar.
 
