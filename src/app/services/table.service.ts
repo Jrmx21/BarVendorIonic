@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TableService {
 
-  private apiUrl = 'https://barvendor-8d5be5ce5941.herokuapp.com/api/mesas'; // La URL de tu backend
+  private apiUrl = 'http://localhost:6969/api/mesas'; // La URL de tu backend
 
   constructor(private http: HttpClient) { }
   getAllTables(): Observable<any[]> {

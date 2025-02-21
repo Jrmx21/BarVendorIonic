@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AccountService {
 
-  private apiUrl = 'https://barvendor-8d5be5ce5941.herokuapp.com/api/cuentas'; // La URL de tu backend
+  private apiUrl = 'http://localhost:6969/api/cuentas'; // La URL de tu backend
 
   constructor(private http: HttpClient) { }
 

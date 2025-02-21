@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'https://barvendor-8d5be5ce5941.herokuapp.com/api/users';
+  private apiUrl = 'http://localhost:6969/api/users';
 
   constructor(private http: HttpClient) {}
 
